@@ -11,6 +11,7 @@ class Dog {
 // variable to hold all dog objects for easy reference
 let dogs = []
 const ul = document.querySelector('ul');
+let list
 
 // GET request for API
 fetch("http://127.0.0.1:3000/dogs")
@@ -25,8 +26,12 @@ fetch("http://127.0.0.1:3000/dogs")
             li.appendChild(document.createTextNode(`${dogs[id].name}`));
             ul.appendChild(li);
         });
-
-    });
+    })
+    // gets all elements in list. can use to get onClickListeners for each one to get a "show" of all attributes of dog class
+    .finally(() => {
+        list = document.getElementsByTagName("li");
+        console.log(list[3].innerHTML);
+    })
 
 
 
