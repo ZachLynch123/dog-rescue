@@ -21,16 +21,20 @@ fetch("http://127.0.0.1:3000/dogs")
     .then(json => {
         json.map((value,id) => {
             dogs[id] = new Dog(value.id, value.name, value.age, value.gender, value.breed);
-            const li = document.createElement('li');
-            console.log(dogs[id]);
-            li.appendChild(document.createTextNode(`${dogs[id].name}`));
-            ul.appendChild(li);
+            const btn = document.createElement('button');
+            btn.appendChild(document.createTextNode(`${dogs[id].name}`));
+            ul.appendChild(btn);
         });
     })
     // gets all elements in list. can use to get onClickListeners for each one to get a "show" of all attributes of dog class
     .finally(() => {
-        list = document.getElementsByTagName("li");
-        console.log(list[3].innerHTML);
+        list = document.getElementsByTagName("button");
+        console.log(list)
+        for (let i = 0; i < list.length; i++) {
+            list[i].addEventListener('click', e => {
+                alert(`${list[i].innerHTML} was clicked!`)
+            });
+        }
     })
 
 
