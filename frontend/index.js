@@ -1,3 +1,4 @@
+// Dog class used to deconstruct JSON response
 class Dog {
     constructor(id, name, age, gender, breed){
         this.id = id;
@@ -7,8 +8,10 @@ class Dog {
         this.breed = breed;
     }
 }
+// variable to hold all dog objects for easy reference
 let dogs = []
 
+// GET request for API
 fetch("http://127.0.0.1:3000/dogs")
     .then(res => {
         return res.json();
@@ -22,3 +25,11 @@ fetch("http://127.0.0.1:3000/dogs")
 dogs.map(element => {
     console.log(element.name);
 })
+
+
+
+
+
+
+
+
