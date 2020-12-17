@@ -22,9 +22,16 @@ fetch("http://127.0.0.1:3000/dogs")
         })
     });
 
-dogs.map(element => {
-    console.log(element.name);
-})
+function listDogs(dogs){
+    const ul = document.querySelector('ul');
+    console.log(ul);
+    const li = document.createElement('li');
+    li.appendChild(document.createTextNode("Hello from JS"));
+    ul.appendChild(li)
+    console.log('running');
+}
+
+listDogs(dogs);
 
 
 
