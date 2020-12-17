@@ -11,7 +11,6 @@ class Dog {
 // variable to hold all dog objects for easy reference
 let dogs = []
 const ul = document.querySelector('ul');
-let list
 
 // GET request for API
 fetch("http://127.0.0.1:3000/dogs")
@@ -21,14 +20,12 @@ fetch("http://127.0.0.1:3000/dogs")
     .then(json => {
         json.map((value,id) => {
             dogs[id] = new Dog(value.id, value.name, value.age, value.gender, value.breed);
-            const btn = document.createElement('button');
-            btn.appendChild(document.createTextNode(`${dogs[id].name}`));
-            ul.appendChild(btn);
+            listDogs(dogs[id])
         });
     })
     // gets all elements in list. can use to get onClickListeners for each one to get a "show" of all attributes of dog class
     .finally(() => {
-        list = document.getElementsByTagName("button");
+        const list = document.getElementsByTagName("button");
         for (let i = 0; i < list.length; i++) {
             list[i].addEventListener('click', e => {
                 showDog(dogs[i]);
@@ -43,9 +40,7 @@ function showDog(dog) {
         return res.json();
     })
     .then(json => {
-        while (ul.hasChildNodes()) {
-            ul.removeChild(ul.lastChild);
-        }
+        removeUlChildren(ul)
         const name = document.createElement('li');
         const age = document.createElement('li');
         const gender = document.createElement('li');
@@ -60,7 +55,31 @@ function showDog(dog) {
         ul.appendChild(age);
         ul.appendChild(gender);
         ul.appendChild(breed);
+        
+        const backButton = document.createElement('button');
+        backButton.appendChild(document.createTextNode('Back'));
+        ul.appendChild(backButton);
+        backButton.addEventListener('click', e => {
+            removeUlChildren(ul)
+            for (let i = 0; i < dogs.length; i++) {
+                listDogs(dogs[i]);
+            }
+            backButton.remove();
+        });
+
     });
+}
+
+function listDogs(dog){
+    const btn = document.createElement('button');
+    btn.appendChild(document.createTextNode(`${dog.name}`));
+    ul.appendChild(btn);
+}
+
+function removeUlChildren(ul) {
+    while (ul.hasChildNodes()) {
+        ul.removeChild(ul.lastChild);
+    }
 }
 
 
