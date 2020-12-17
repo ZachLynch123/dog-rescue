@@ -36,7 +36,7 @@ fetch("http://127.0.0.1:3000/dogs")
         }
     });
 
-
+// makes another API call to the show endpoint, to show all the attributes for one dog
 function showDog(dog) {
     fetch(`http://127.0.0.1:3000/dogs/${dog.id}`)
     .then(res => {
@@ -46,6 +46,45 @@ function showDog(dog) {
         while (ul.hasChildNodes()) {
             ul.removeChild(ul.lastChild);
         }
+        const name = document.createElement('li');
+        const age = document.createElement('li');
+        const gender = document.createElement('li');
+        const breed = document.createElement('li');
+
+        name.appendChild(document.createTextNode(json.name));
+        age.appendChild(document.createTextNode(json.age));
+        gender.appendChild(document.createTextNode(json.gender));
+        breed.appendChild(document.createTextNode(json.breed));
+        
+        ul.appendChild(name);
+        ul.appendChild(age);
+        ul.appendChild(gender);
+        ul.appendChild(breed);
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
