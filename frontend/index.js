@@ -10,6 +10,7 @@ class Dog {
 }
 // variable to hold all dog objects for easy reference
 let dogs = []
+const ul = document.querySelector('ul');
 
 // GET request for API
 fetch("http://127.0.0.1:3000/dogs")
@@ -19,24 +20,13 @@ fetch("http://127.0.0.1:3000/dogs")
     .then(json => {
         json.map((value,id) => {
             dogs[id] = new Dog(value.id, value.name, value.age, value.gender, value.breed);
-        })
+            const li = document.createElement('li');
+            console.log(dogs[id]);
+            li.appendChild(document.createTextNode(`${dogs[id].name}`));
+            ul.appendChild(li);
+        });
+
     });
-
-function listDogs(dogs){
-    const ul = document.querySelector('ul');
-    console.log(ul);
-    const li = document.createElement('li');
-    li.appendChild(document.createTextNode("Hello from JS"));
-    ul.appendChild(li)
-    console.log('running');
-}
-
-listDogs(dogs);
-
-
-
-
-
 
 
 
