@@ -12,26 +12,17 @@ class Dog {
 let dogs = []
 const ul = document.querySelector('ul');
 
-// GET request for API
-fetch("http://127.0.0.1:3000/dogs")
-    .then(res => {
-        return res.json();
-    })
-    .then(json => {
-        json.map((value,id) => {
-            dogs[id] = new Dog(value.id, value.name, value.age, value.gender, value.breed);
-            listDogs(dogs[id])
-        });
-    })
-    // gets all elements in list. can use to get onClickListeners for each one to get a "show" of all attributes of dog class
-    .finally(() => {
-        const list = document.getElementsByTagName("button");
-        for (let i = 0; i < list.length; i++) {
-            list[i].addEventListener('click', e => {
-                showDog(dogs[i]);
-            });
-        }
-    });
+function listDogs(dog){
+    const btn = document.createElement('button');
+    btn.appendChild(document.createTextNode(`${dog.name}`));
+    ul.appendChild(btn);
+}
+
+function removeUlChildren(ul) {
+    while (ul.hasChildNodes()) {
+        ul.removeChild(ul.lastChild);
+    }
+}
 
 // makes another API call to the show endpoint, to show all the attributes for one dog
 function showDog(dog) {
@@ -57,8 +48,11 @@ function showDog(dog) {
         ul.appendChild(breed);
         
         const backButton = document.createElement('button');
+        const adoptButton = document.createElement('button');
         backButton.appendChild(document.createTextNode('Back'));
+        adoptButton.appendChild(document.createTextNode('Adopt'));
         ul.appendChild(backButton);
+        ul.appendChild(adoptButton);
         backButton.addEventListener('click', e => {
             removeUlChildren(ul)
             for (let i = 0; i < dogs.length; i++) {
@@ -66,21 +60,50 @@ function showDog(dog) {
             }
             backButton.remove();
         });
+        adoptButton.addEventListener('click', e => {
+            fetch(`http://127.0.0.1:3000/dogs/${json.id}`,{
+                method: 'DELETE',
+            })
+            .then(res => res.text())
+            .then(res => {
+                console.log(res);
+                adoptButton.remove();
+                removeUlChildren(ul)
+                for (let i = 0; i < dogs.length; i++) {
+                    listDogs(dogs[i]);
+                }
+            });
+        });
 
     });
 }
 
-function listDogs(dog){
-    const btn = document.createElement('button');
-    btn.appendChild(document.createTextNode(`${dog.name}`));
-    ul.appendChild(btn);
-}
 
-function removeUlChildren(ul) {
-    while (ul.hasChildNodes()) {
-        ul.removeChild(ul.lastChild);
-    }
-}
+
+// GET request for API
+fetch("http://127.0.0.1:3000/dogs")
+    .then(res => {
+        return res.json();
+    })
+    .then(json => {
+        json.map((value,id) => {
+            dogs[id] = new Dog(value.id, value.name, value.age, value.gender, value.breed);
+            listDogs(dogs[id])
+        });
+    })
+    // gets all elements in list. can use to get onClickListeners for each one to get a "show" of all attributes of dog class
+    .finally(() => {
+        const list = document.getElementsByTagName("button");
+        for (let i = 0; i < list.length; i++) {
+            list[i].addEventListener('click', e => {
+                showDog(dogs[i]);
+            });
+        }
+    });
+
+
+
+
 
 
 
