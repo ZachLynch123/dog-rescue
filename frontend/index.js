@@ -26,11 +26,13 @@ function removeUlChildren(ul) {
 
 // makes another API call to the show endpoint, to show all the attributes for one dog
 function showDog(dog) {
-    fetch(`http://127.0.0.1:3000/dogs/${dog.id}`)
+    fetch(`http://127.0.0.1:3000/dogs/${dog.id + 1}`)
     .then(res => {
+        console.log(res.json);
         return res.json();
     })
     .then(json => {
+        console.log(json);
         removeUlChildren(ul)
         const name = document.createElement('li');
         const age = document.createElement('li');
@@ -69,9 +71,7 @@ function showDog(dog) {
                 console.log(res);
                 adoptButton.remove();
                 removeUlChildren(ul)
-                for (let i = 0; i < dogs.length; i++) {
-                    listDogs(dogs[i]);
-                }
+                getAllDogs()
             });
         });
 
@@ -81,7 +81,8 @@ function showDog(dog) {
 
 
 // GET request for API
-fetch("http://127.0.0.1:3000/dogs")
+function getAllDogs(){
+    fetch("http://127.0.0.1:3000/dogs")
     .then(res => {
         return res.json();
     })
@@ -101,6 +102,9 @@ fetch("http://127.0.0.1:3000/dogs")
             });
         }
     });
+}
+
+getAllDogs()
 
 
 
