@@ -1,4 +1,4 @@
-// Dog class used to deconstruct JSON response
+// Dog class used fo deconstruction of JSON response
 class Dog {
     constructor(id, name, age, gender, breed){
         this.id = id;
@@ -30,27 +30,35 @@ function showDog(dog) {
     console.log(dog.id);
     fetch(`http://127.0.0.1:3000/dogs/${dog.id}`)
     .then(res => {
-        console.log(res.json);
         return res.json();
     })
     .then(json => {
+        console.log(json);
+        const dogAttributes = json.data.attributes
+        const colorAttribute = json.included[0].attributes
+        // removes previous listed buttons
         removeUlChildren(ul)
+
+        // assigns list elements to ul of dog attributes 
         const name = document.createElement('li');
         const age = document.createElement('li');
         const gender = document.createElement('li');
         const breed = document.createElement('li');
-        console.log(json.name);
+        const color = document.createElement('li');
 
-        name.appendChild(document.createTextNode(json.name));
-        age.appendChild(document.createTextNode(json.age));
-        gender.appendChild(document.createTextNode(json.gender));
-        breed.appendChild(document.createTextNode(json.breed));
+        name.appendChild(document.createTextNode("name: " + dogAttributes.name));
+        age.appendChild(document.createTextNode("age: " + dogAttributes.age));
+        gender.appendChild(document.createTextNode("gender: " + dogAttributes.gender));
+        breed.appendChild(document.createTextNode("breed: " + dogAttributes.breed));
+        color.appendChild(document.createTextNode("color: " + colorAttribute.color))
         
         ul.appendChild(name);
         ul.appendChild(age);
         ul.appendChild(gender);
         ul.appendChild(breed);
+        ul.appendChild(color)
         
+        // create buttons to go back to main screen or adopt dog (delete dog from db)
         const backButton = document.createElement('button');
         const adoptButton = document.createElement('button');
         backButton.appendChild(document.createTextNode('Back'));
@@ -63,7 +71,8 @@ function showDog(dog) {
             backButton.remove();
         });
         adoptButton.addEventListener('click', e => {
-            fetch(`http://127.0.0.1:3000/dogs/${json.id}`,{
+            console.log(json);
+            fetch(`http://127.0.0.1:3000/dogs/${json.data.id}`,{
                 method: 'DELETE',
             })
             .then(res => res.text())
@@ -80,7 +89,7 @@ function showDog(dog) {
 
 
 
-// GET request for API
+// GET request for all dogs API endpoint
 function getAllDogs(){
     fetch("http://127.0.0.1:3000/dogs")
     .then(res => {
@@ -93,7 +102,7 @@ function getAllDogs(){
             listDogs(dogs[id])
         });
     })
-    // gets all elements in list. can use to get onClickListeners for each one to get a "show" of all attributes of dog class
+    // adds onclick listener to each dog button and calls the show dog function
     .finally(() => {
         const list = document.getElementsByTagName("button");
         for (let i = 0; i < list.length; i++) {
