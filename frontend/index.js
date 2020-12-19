@@ -23,21 +23,23 @@ function removeUlChildren(ul) {
         ul.removeChild(ul.lastChild);
     }
 }
+// TODO: use fast-json API to serialize data and add color of dog to Dog object
 
 // makes another API call to the show endpoint, to show all the attributes for one dog
 function showDog(dog) {
-    fetch(`http://127.0.0.1:3000/dogs/${dog.id + 1}`)
+    console.log(dog.id);
+    fetch(`http://127.0.0.1:3000/dogs/${dog.id}`)
     .then(res => {
         console.log(res.json);
         return res.json();
     })
     .then(json => {
-        console.log(json);
         removeUlChildren(ul)
         const name = document.createElement('li');
         const age = document.createElement('li');
         const gender = document.createElement('li');
         const breed = document.createElement('li');
+        console.log(json.name);
 
         name.appendChild(document.createTextNode(json.name));
         age.appendChild(document.createTextNode(json.age));
@@ -57,9 +59,7 @@ function showDog(dog) {
         ul.appendChild(adoptButton);
         backButton.addEventListener('click', e => {
             removeUlChildren(ul)
-            for (let i = 0; i < dogs.length; i++) {
-                listDogs(dogs[i]);
-            }
+            getAllDogs()
             backButton.remove();
         });
         adoptButton.addEventListener('click', e => {
@@ -87,7 +87,7 @@ function getAllDogs(){
         return res.json();
     })
     .then(json => {
-        console.log(json);
+        console.log(json[0].colors);
         json.map((value,id) => {
             dogs[id] = new Dog(value.id, value.name, value.age, value.gender, value.breed);
             listDogs(dogs[id])
