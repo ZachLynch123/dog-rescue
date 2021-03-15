@@ -12,10 +12,18 @@ class Dog {
 let dogs = []
 const ul = document.querySelector('ul');
 
-function listDogs(dog){
-    const btn = document.createElement('button');
-    btn.appendChild(document.createTextNode(`${dog.name}`));
-    ul.appendChild(btn);
+function listDogs(dogs){
+    dogs.sort(function(a,b) {
+        if (a.name < b.name) {return -1;}
+        if (a.name > b.name) {return 1;}
+        return 0;
+    });
+    for(let i = 0; i < dogs.length; i++) {
+        const btn = document.createElement('button');
+        btn.appendChild(document.createTextNode(`${dogs[i].name}`));
+        ul.appendChild(btn);
+    }
+    
 }
 
 function removeUlChildren(ul) {
@@ -23,7 +31,6 @@ function removeUlChildren(ul) {
         ul.removeChild(ul.lastChild);
     }
 }
-// TODO: use fast-json API to serialize data and add color of dog to Dog object
 
 // makes another API call to the show endpoint, to show all the attributes for one dog
 function showDog(dog) {
@@ -45,6 +52,7 @@ function showDog(dog) {
         const gender = document.createElement('li');
         const breed = document.createElement('li');
         const color = document.createElement('li');
+
 
         name.appendChild(document.createTextNode("name: " + dogAttributes.name));
         age.appendChild(document.createTextNode("age: " + dogAttributes.age));
@@ -96,11 +104,11 @@ function getAllDogs(){
         return res.json();
     })
     .then(json => {
-        console.log(json[0].colors);
         json.map((value,id) => {
             dogs[id] = new Dog(value.id, value.name, value.age, value.gender, value.breed);
-            listDogs(dogs[id])
-        });
+        })
+    }).then(() => {
+        listDogs(dogs)
     })
     // adds onclick listener to each dog button and calls the show dog function
     .finally(() => {
